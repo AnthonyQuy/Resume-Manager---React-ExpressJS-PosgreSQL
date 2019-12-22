@@ -8,7 +8,7 @@ const resumeCollection = 'resumes'
 
 exports.createDB = () => {
   MongoClient.connect(url, { useUnifiedTopology: true }).then(client => {
-    var db = client.db(dbName);
+    let db = client.db(dbName);
     db.createCollection(resumeCollection, {
       validator: {
         $jsonSchema: {
@@ -35,7 +35,7 @@ exports.createDB = () => {
         }
       }
     }).then(collection => {
-      var data = [
+      let data = [
         { name: 'Anthony Nguyen', jobTitle: 'jobTitle', jobDescription: 'jobDescription', currentCompany: 'currentCompany' },
         { name: 'Shivkumar Krishnan', jobTitle: 'jobTitle', jobDescription: 'jobDescription', currentCompany: 'currentCompany' }
       ];
@@ -75,12 +75,10 @@ exports.getResumeById = id => {
         client.close();
         resolve(res);
       }).catch(err => {
-        console.error(err)
-        reject(new Error(err))
+        reject(err);
       })
     }).catch(err => {
-      console.error(err)
-      reject(new Error(err))
+      reject(err);
     })
   })
 }
@@ -89,7 +87,7 @@ exports.getResumeById = id => {
 exports.getResumeByNameRegex = regex => {
   return new Promise((resolve, reject) => {
     MongoClient.connect(url, { useUnifiedTopology: true }).then(client => {
-      const result = client.db(dbName).collection(resumeCollection).find({ name: {$regex : regex} }).toArray();
+      const result = client.db(dbName).collection(resumeCollection).find({ name: { $regex: regex } }).toArray();
       client.close();
       resolve(result);
     }).catch(err => {
